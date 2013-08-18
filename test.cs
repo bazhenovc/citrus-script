@@ -29,11 +29,11 @@ class Base
 		if (b > 40) {
 			a = b;
 		} else {
-			print('fail');
+			print("b > 40!");
 		}
 
 		if (b == 54) {
-			print('ok');
+			print("ok");
 		}
 
 		// Function call
@@ -44,7 +44,7 @@ class Base
 class Bakery: Base
 {
 	Bread lastBread; // field declaration with default access type(private)
-	Bread breads[];
+	Bread breads[]; // dynamic array declaration
 
 	Bread bakeBread(int breadType) // method declaration with default access type(public)
 	{
@@ -54,7 +54,7 @@ class Bakery: Base
 
 		// Method calls
 		bread.setType(breadType);
-		bread.setName('Sweety' + 'Pony');
+		bread.setName("Sweety" + "Pony");
 		bread.bake();
 
 		return bread;
@@ -74,7 +74,7 @@ void func()
 {
 	Bakery bakery = Bakery::new();
 
-	Bread breads[128];
+	Bread breads[128]; // static array declaration
 
 	breads[0] = bakery.bakeBread(123);
 	breads[getBreadIndex()] = bread12;
@@ -97,6 +97,18 @@ bar(foo(c, doo(a, too(b))), a, b, c);
 
 baz(12);
 kott(1234.12);
+
+char getRandomChar()
+{
+	if (getProbability()) {
+		return 'A';
+	}
+
+	return 'C';
+}
+
+// this won`t work now
+//assert(getRandomChar() == 'A');
 
 // this won`t work now
 //int v = (a * c) + (v - d);

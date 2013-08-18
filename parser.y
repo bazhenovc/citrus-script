@@ -27,6 +27,7 @@
 
 %token tkClass
 %token tkDigit
+%token tkStringLiteral
 %token tkColon
 %token tkSemicolon
 %token tkDot
@@ -52,6 +53,7 @@
 %token tkIf
 %token tkElse
 %token tkEqualsEquals
+%token tkReturn
 
 %start translation_unit
 
@@ -75,8 +77,13 @@ numeric_constant
 	;
 
 string_constant
+	: tkStringLiteral
+	{ std::cout << "string constant: \"" << $1 << "\"" << std::endl; }
+	;
+
+character_constant
 	: tkQuote name tkQuote
-	{ std::cout << "string constant: \"" << $2 << "\"" << std::endl; }
+	{ std::cout << "char constant: '" << $2 << "'" << std::endl; }
 	;
 
 var_ref
@@ -94,6 +101,7 @@ var_or_constant_ref
 	: var_ref
 	| numeric_constant
 	| string_constant
+	| character_constant
 	;
 
 // Expression
@@ -210,6 +218,13 @@ func_declaration
 	{ std::cout << "func_declaration: " << $2 << " args: " << $4 << std::endl; }
 	;
 
+return_declaration
+	: tkReturn tkSemicolon
+	{ std::cout << "return_declaration: void" << std::endl; }
+	| tkReturn expr tkSemicolon
+	{ std::cout << "return_declaration: expr" << std::endl; }
+	;
+
 // Block body
 block_body
 	:
@@ -219,6 +234,8 @@ block_body
 	| block_body expr tkSemicolon
 	{}
 	| block_body if_expr
+	{}
+	| block_body return_declaration
 	{}
 	;
 

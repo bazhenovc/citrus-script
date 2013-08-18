@@ -9,6 +9,7 @@
 
 %x COMMENT
 %x MULTILINE_COMMENT
+%x STRING_LITERAL
 
 digit [0-9]*
 identifier [A-Za-z]([A-Za-z]|[0-9])*
@@ -24,6 +25,10 @@ identifier [A-Za-z]([A-Za-z]|[0-9])*
 <MULTILINE_COMMENT>"*\/"           { BEGIN(INITIAL);                }
 <MULTILINE_COMMENT>.               { yylval = yytext;               }
 
+"\""                 { yylval.clear(); BEGIN(STRING_LITERAL);  }
+<STRING_LITERAL>"\"" { BEGIN(INITIAL); return tkStringLiteral; }
+<STRING_LITERAL>.    { yylval += yytext;                       }
+
 \n\r|\r\n|\n|\r { yylineno++;                             }
 #               {}
 if              { yylval = yytext; return tkIf;           }
@@ -32,6 +37,7 @@ class           { yylval = yytext; return tkClass;        }
 private         { yylval = yytext; return tkPrivate;      }
 public          { yylval = yytext; return tkPublic;       }
 protected       { yylval = yytext; return tkProtected;    }
+return          { yylval = yytext; return tkReturn;       }
 {digit}         { yylval = yytext; return tkDigit;        }
 "=="            { yylval = yytext; return tkEqualsEquals; }
 "="             { yylval = yytext; return tkEquals;       }
